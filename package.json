@@ -1,27 +1,14 @@
 {
   "name": "api-node",
   "version": "1.0.0",
-  "description": "",
+  "description": "version uno de api-node",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "npx nodemon app.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LU-CCP/api-node.git"
-  },
-  "keywords": [
-    "api",
-    "express",
-    "LU"
-  ],
-  "author": "LU",
+  "author": "fabian",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/LU-CCP/api-node/issues"
-  },
-  "homepage": "https://github.com/LU-CCP/api-node#readme",
   "dependencies": {
     "express": "^4.17.1",
     "mssql": "^6.0.1"
