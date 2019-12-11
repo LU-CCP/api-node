@@ -4,7 +4,19 @@ const sqlConfig = require("../mssqlConfig");
 
 const router = express.Router();
 
-//Crear una ruta que permita registrar un propietario
+//callbacks
+/**
+ * @swagger
+ * /test:
+ *  get:
+ *      description: Utilizado a modo de prueba para testear el swagger
+ *      responses:
+ *          '200':
+ *              description: Respuesta exitosa!
+ *          '404':
+ *              description: Recurso no encontrado
+ */
+router.get('/test', function (req, res) {
 
 // router.get('/', function (req, res) {
 //     sql.connect(sqlConfig.config, function (err) {
@@ -48,6 +60,35 @@ router.post("/", function(req, res) {
 
       if (data.recordsets[0] == 0) sql.close();
     });
+});
+
+//promises
+router.get('/promise', function (req, res) {
+    sql.connect(sqlConfig.config)
+        .then(function (conn) {
+            return conn.query('select * from persona');
+        })
+        .then(data => {
+            res.send(data);
+        })
+        .catch(error => console.log(error))
+});
+
+//async await
+router.get('/async', async (req, res) => {
+
+    try {
+        let conn = await sql.connect(sqlConfig.config);
+
+        let result = await conn.request().query('select * from persona');
+
+        sql.close();
+
+        res.send(result);
+    }
+    catch (error) {
+        console.log(error)
+    }
 
     sqlRequest.query(
       "insert into cita values(@fecha, @id_paciente,@motivo_consulta,@id_medico,@monto)",
