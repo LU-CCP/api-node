@@ -60,9 +60,4 @@ router.get('/async', async (req, res) => {
 
 });
 
-router.get('/ejemplo');
-//Crear una ruta que permita el registro de las citas,
-//previo a hacer el registro se debe validar que existan los regitros 
-//de idPaciente y idPersona asociados.
-
 module.exports = router;
