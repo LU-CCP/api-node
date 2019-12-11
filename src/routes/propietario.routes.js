@@ -73,48 +73,6 @@ router.post("/addcita", function(req, res) {
     sqlRequest.input("id_medico", sql.BigInt, id_medico);
     sqlRequest.input("motivo_consulta", sql.VarChar, motivo_consulta);
     sqlRequest.input("monto", sql.Money, monto);
-=======
-    sql.connect(sqlConfig.config, function (err) {
-        if (err) console.log(err);
-        const sqlRequest = new sql.Request();
-
-        sqlRequest.query('select * from persona', function (error, data) {
-            if (error) console.log(error);
-            res.send(data);
-            sql.close();
-        })
-    });
-});
-
-//promises
-router.get('/promise', function (req, res) {
-    sql.connect(sqlConfig.config)
-        .then(function (conn) {
-            return conn.query('select * from persona');
-        })
-        .then(data => {
-            res.send(data);
-        })
-        .catch(error => console.log(error))
-});
-
-//async await
-router.get('/async', async (req, res) => {
-
-    try {
-        let conn = await sql.connect(sqlConfig.config);
-
-        let result = await conn.request().query('select * from persona');
-
-        sql.close();
-
-        res.send(result);
-    }
-    catch (error) {
-        console.log(error)
-    }
->>>>>>> master
-
     sqlRequest.query("SELECT id FROM paciente WHERE id=@id_paciente", function(
       error,
       resultPaciente
@@ -145,12 +103,32 @@ router.get('/async', async (req, res) => {
   });
 });
 
-<<<<<<< HEAD
-module.exports = router;
-=======
-//Crear una ruta que permita el registro de las citas,
-//previo a hacer el registro se debe validar que existan los regitros 
-//de idPaciente y idPersona asociados.
+//promises
+router.get('/promise', function (req, res) {
+  sql.connect(sqlConfig.config)
+      .then(function (conn) {
+          return conn.query('select * from persona');
+      })
+      .then(data => {
+          res.send(data);
+      })
+      .catch(error => console.log(error))
+});
 
+//async await
+router.get('/async', async (req, res) => {
+
+  try {
+      let conn = await sql.connect(sqlConfig.config);
+
+      let result = await conn.request().query('select * from persona');
+
+      sql.close();
+
+      res.send(result);
+  }
+  catch (error) {
+      console.log(error)
+  }
 module.exports = router;
 >>>>>>> master
