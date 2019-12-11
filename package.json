@@ -24,7 +24,9 @@
   "homepage": "https://github.com/LU-CCP/api-node#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "mssql": "^6.0.1"
+    "mssql": "^6.0.1",
+    "swagger-jsdoc": "^3.5.0",
+    "swagger-ui-express": "^4.1.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.1"
