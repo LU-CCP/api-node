@@ -1,14 +1,16 @@
 const express = require("express");
 const propietarioRouters = require("./src/routes/propietario.routes");
 const pacienteRoutes = require("./src/routes/paciente.routes");
-const registrar = require("./src/routes/propietarioRegistrar.routes");
+const propietarioRegistrar = require("./src/routes/propietarioRegistrar.routes");
+const citaRegistrar = require("./src/routes/agendarCita");
 const app = express();
 
 app.use(express.json());
 app.use("/propietario", propietarioRouters);
 app.use("/paciente", pacienteRoutes);
-app.use("/registrarpropietario", registrar);
+app.use("/registrarpropietario", propietarioRegistrar);
+app.use("/registrarcita", citaRegistrar);
 
-app.listen(3010, function() {
+app.listen(3004, function() {
   console.log("Omar hacked you");
 });
