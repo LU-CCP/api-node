@@ -51,4 +51,44 @@ router.post("/add", function(req, res) {
   });
 });
 
+router.post("/addcita", function(req, res) {
+  const { id_paciente, motivo_consulta, id_medico, monto } = req.body;
+  sql.connect(sqlConfig.config, function(err) {
+    if (err) console.log(err);
+    const sqlRequest = new sql.Request();
+    sqlRequest.input("id_paciente", sql.BigInt, id_paciente);
+    sqlRequest.input("id_medico", sql.BigInt, id_medico);
+    sqlRequest.input("motivo_consulta", sql.VarChar, motivo_consulta);
+    sqlRequest.input("monto", sql.Money, monto);
+
+    sqlRequest.query("SELECT id FROM paciente WHERE id=@id_paciente", function(
+      error,
+      resultPaciente
+    ) {
+      sqlRequest.query(
+        "SELECT id FROM medico_veterinario WHERE id = @id_medico",
+        function(error, resultVeterinario) {
+          if (
+            resultPaciente.recordsets[0].length &&
+            resultVeterinario.recordsets[0].length
+          ) {
+            sqlRequest.query(
+              "INSERT INTO cita VALUES(getdate(), @id_paciente, @motivo_consulta, @id_medico, @monto)",
+              function(error, data) {
+                res.json({ msg: "Se agendo tu cita correctamente" });
+              }
+            );
+          } else {
+            res.status(400).json({
+              error:
+                "Lo siento pero no se encuentra el veterinario o el paciente"
+            });
+          }
+          sql.close();
+        }
+      );
+    });
+  });
+});
+
 module.exports = router;
