@@ -11,5 +11,3 @@ app.use("/paciente", pacienteRoutes);
 app.listen(3005, function() {
   console.log("Server running on port 3005");
 });
-
-//holi
