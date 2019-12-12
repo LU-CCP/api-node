@@ -67,14 +67,36 @@ router.get("/async", async (req, res) => {
 
 /**
  * @swagger
- * /save:
- *  post:
- *      description: Ingreso de nuevo propietario
- *      responses:
- *          '200':
- *              description: Respuesta exitosa!
- *          '404':
- *              description: Recurso no encontrado
+ * path:
+ *  /propietario/save:
+ *      post:
+ *          summary: Ingreso de nuevo propietario
+ *          tags: [Propietario]
+ *          parameters:
+ *              -name: rut
+ *              in: body
+ *              type: string
+ *              -name: nombre
+ *              in: body
+ *              type: string
+ *              -name: apellido_materno
+ *              in: body
+ *              type: string
+ *              -name: apellido_paterno
+ *              in: body
+ *              type: string
+ *              -name: telefono
+ *              in: body
+ *              type: string
+ *          responses:
+ *              '200':
+ *                  description: Respuesta exitosa!
+ *              '400':
+ *                  description: Parámetros request inválidos
+ *              '404':
+ *                  description: Recurso no encontrado
+ *              '500':
+ *                  description: Internal Server Error
  */
 router.post("/save", async (req, res) => {
   let propietario = await servicesPropietario.savePropietario(req.body);
@@ -89,14 +111,26 @@ router.post("/save", async (req, res) => {
  */
 /**
  * @swagger
- * /delete:
- *  get:
- *      description: Eliminar propietario existente a partir del id del propietario
- *      responses:
- *          '200':
- *              description: Respuesta exitosa!
- *          '404':
- *              description: Recurso no encontrado
+ * path:
+ *  /propietario/delete/:id:
+ *      get:
+ *          summary: Eliminar propietario existente a partir del id del propietario
+ *          tags: [Propietario]
+ *          parameters:
+ *              -name: id
+ *              in: path
+ *              type: string
+ *          responses:
+ *              '200':
+ *                  description: Respuesta exitosa!
+ *              '201':
+ *                  description: Propietario creado!
+ *              '400':
+ *                  description: Parámetros request inválidos
+ *              '404':
+ *                  description: Recurso no encontrado
+ *              '500':
+ *                  description: Internal Server Error
  */
 router.get("/delete/:id", async (req, res) => {
   if (servicesPropietario.existsPropietarioId) {
@@ -113,14 +147,40 @@ router.get("/delete/:id", async (req, res) => {
  */
 /**
  * @swagger
- * /edit:
- *  put:
- *      description: Actualizar datos de un propietario existente a partir del id del propietario
- *      responses:
- *          '200':
- *              description: Respuesta exitosa!
- *          '404':
- *              description: Recurso no encontrado
+ *
+ *  path:
+ *  /propietario/edit/:id:
+ *      put:
+ *          summary: Actualizar datos de un propietario existente a partir del id del propietario
+ *          tags: [Propietario]
+ *          parameters:
+ *              -name: id
+ *              in: path
+ *              type: string
+ *              -name: rut
+ *              in: body
+ *              type: string
+ *              -name: nombre
+ *              in: body
+ *              type: string
+ *              -name: apellido_materno
+ *              in: body
+ *              type: string
+ *              -name: apellido_paterno
+ *              in: body
+ *              type: string
+ *              -name: telefono
+ *              in: body
+ *              type: string
+ *          responses:
+ *              '200':
+ *                  description: Respuesta exitosa!
+ *              '400':
+ *                  description: Parámetros request inválidos
+ *              '404':
+ *                  description: Recurso no encontrado
+ *              '500':
+ *                  description: Internal Server Error
  */
 router.put("/edit/:id", async (req, res) => {
   if (servicesPropietario.existsPropietarioId) {
@@ -137,19 +197,30 @@ router.put("/edit/:id", async (req, res) => {
  */
 /**
  * @swagger
- * /show:
- *  get:
- *      description: Obtener datos de un propietario a partir del su id
- *      responses:
- *          '200':
- *              description: Respuesta exitosa!
- *          '404':
- *              description: Recurso no encontrado
+ *
+ *  path:
+ *  /propietario/show/:id:
+ *      get:
+ *          summary: Obtener datos de un propietario a partir del su id
+ *          tags: [Propietario]
+ *          parameters:
+ *              -name: id
+ *              in: path
+ *              type: string
+ *          responses:
+ *              '200':
+ *                  description: Respuesta exitosa!
+ *              '400':
+ *                  description: Parámetros request inválidos
+ *              '404':
+ *                  description: Recurso no encontrado
+ *              '500':
+ *                  description: Internal Server Error
  */
 router.get("/show/:id", async (req, res) => {
   if (servicesPropietario.existsPropietarioId) {
     let propietario = await servicesPropietario.showPropietario(req.params);
-    res.send(propietario);
+    res.send(propietario.recordset);
   }
 });
 /**
@@ -161,19 +232,29 @@ router.get("/show/:id", async (req, res) => {
 
 /**
  * @swagger
- * /filter:
- *  get:
- *      description: Obtener listado de propietarios filtrado por el nombre
- *      responses:
- *          '200':
- *              description: Respuesta exitosa!
- *          '404':
- *              description: Recurso no encontrado
+ *  path:
+ *  /propietario/filter/:nombre:
+ *      get:
+ *          summary: Obtener listado de propietarios filtrado por el nombre
+ *          tags: [Propietario]
+ *          parameters:
+ *              -name: nombre
+ *              in: path
+ *              type: string
+ *          responses:
+ *              '200':
+ *                  description: Respuesta exitosa!
+ *              '400':
+ *                  description: Parámetros request inválidos
+ *              '404':
+ *                  description: Recurso no encontrado
+ *              '500':
+ *                  description: Internal Server Error
  */
 router.get("/filter/:nombre", async (req, response) => {
   if (servicesPropietario.existsPropietarioId) {
     let propietario = await servicesPropietario.filterPropietario(req.params);
-    response.send(propietario);
+    response.send(propietario.recordset);
   }
 });
 
