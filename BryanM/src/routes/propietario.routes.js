@@ -60,24 +60,42 @@ router.get("/async", async (req, res) => {
 
 router.post("/agregar", async (request, response) => {
   const {
-    id,
     rut,
     nombre,
     apellido_materno,
     apellido_paterno,
-    telefono
+    telefono,
+    esMedico,
+    fecha_graduacion
   } = request.body;
-  if (propietarioService.getPropietario(id) == false) {
-    propietarioService.setPropietario(
-      rut,
-      nombre,
-      apellido_materno,
-      apellido_paterno,
-      telefono
-    );
-    response.send("Agregado correctamente");
-  } else {
-    response.send("Propietario ya registrado");
+
+  try {
+    if ((await propietarioService.verifPropietario(rut)) == false) {
+      propietarioService.setPropietario(
+        rut,
+        nombre,
+        apellido_materno,
+        apellido_paterno,
+        telefono
+      );
+      response.status(500).send("Propietario agregado correctamente");
+    } else {
+      response.status(409).send("Propietario ya registrado");
+    }
+
+    if (await esMedico) {
+      if ((await propietarioService.verifMedico(rut)) == false) {
+        propietarioService.setMedico(
+          propietarioService.getIdPersona(rut).recordsets[0],
+          fecha_graduacion
+        );
+        response.send("Medico agregado correctamente");
+      } else {
+        response.status(409).send("Medico ya registrado");
+      }
+    }
+  } catch (err) {
+    response.status(400).send(error);
   }
 });
 
