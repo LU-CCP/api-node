@@ -52,6 +52,18 @@ const setPropietario = async (
   }
 };
 
+const setMedico = async (id_persona, fecha_graduacion) => {
+  const conn = await sql.connect(sqlConfig.config);
+
+  await conn
+    .request()
+    .input("id_persona", id_persona)
+    .input("fecha_graduacion", fecha_graduacion)
+    .query(
+      "INSERT INTO medico_veterinario VALUES (@id_persona, @fecha_graduacion)"
+    );
+};
+
 const getIdPersona = async rut => {
   const conn = await sql.connect(sqlConfig.config);
 
@@ -85,18 +97,6 @@ const verifMedico = async rut => {
   } catch (err) {
     console.log(err);
   }
-};
-
-const setMedico = async (id_persona, fecha_graduacion) => {
-  const conn = await sql.connect(sqlConfig.config);
-
-  await conn
-    .request()
-    .input("id_persona", id_persona)
-    .input("fecha_graduacion", fecha_graduacion)
-    .query(
-      "INSERT INTO medico_veterinario VALUES (@idPersona, @fecha_graduacion)"
-    );
 };
 
 module.exports = {
