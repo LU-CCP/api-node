@@ -1,6 +1,7 @@
-const express = require('express');
-const sql = require('mssql');
-const sqlConfig = require('../mssqlConfig');
+const express = require("express");
+const sql = require("mssql");
+const sqlConfig = require("../mssqlConfig");
+const propietarioService = require("../services/propietario.service");
 
 const router = express.Router();
 
@@ -9,55 +10,86 @@ const router = express.Router();
  * @swagger
  * /test:
  *  get:
- *      description: Utilizado a modo de prueba para testear el swagger
+ *      description: Pagina creada para el registro de pacientes
  *      responses:
  *          '200':
- *              description: Respuesta exitosa!
+ *              description: Agregado con exito!
  *          '404':
- *              description: Recurso no encontrado
+ *              description: Fallo al agregar
  */
-router.get('/test', function (req, res) {
-
-    sql.connect(sqlConfig.config, function (err) {
-        if (err) console.log(err);
-        const sqlRequest = new sql.Request();
-
-        sqlRequest.query('select * from persona', function (error, data) {
-            if (error) console.log(error);
-            res.send(data);
-            sql.close();
-        })
-    });
-});
-
-//promises
-router.get('/promise', function (req, res) {
-    sql.connect(sqlConfig.config)
-        .then(function (conn) {
-            return conn.query('select * from persona');
-        })
-        .then(data => {
-            res.send(data);
-        })
-        .catch(error => console.log(error))
-});
-
 //async await
-router.get('/async', async (req, res) => {
+router.post("/registrarpropietario", async (req, res) => {
+  const {
+    rut,
+    nombre,
+    apellido_materno,
+    apellido_paterno,
+    telefono,
+    esmedico,
+    fecha_graduacion
+  } = req.body;
 
+  const comando1 =
+    "INSERT INTO Persona VALUES(@rut, @nombre, @apellido_materno, @apellido_paterno, @telefono)";
+  const comando2 =
+    "INSERT INTO medico_veterinario VALUES(@id_persona, @fecha_graduacion)";
+  if ((await propietarioService.consultarUsuarioGuardado(rut)) == true) {
     try {
-        let conn = await sql.connect(sqlConfig.config);
+      let conn = await sql.connect(sqlConfig.config);
+      await conn
+        .request()
+        .input("rut", rut)
+        .input("nombre", nombre)
+        .input("apellido_materno", apellido_materno)
+        .input("apellido_paterno", apellido_paterno)
+        .input("telefono", telefono)
+        .query(comando1);
 
-        let result = await conn.request().query('select * from persona');
+      if (await esmedico) {
+        if (propietarioService.consultarMedicoRegistrado(rut) == true) {
+          await conn
+            .request()
+            .input("id_persona", propietarioService.devolverIdPersona(rut))
+            .input("fecha_graduacion", fecha_graduacion)
+            .query(comando2);
 
-        sql.close();
+          sql.close();
 
-        res.send(result);
+          res.send(
+            "Usuario registrado exitosamente, agregado a medico tambien!"
+          );
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
-    catch (error) {
-        console.log(error)
-    }
+  } else {
+    res.status(409).send("Usuario ya registrado previamente");
+  }
+});
 
+router.get("/buscarpropietario", async (req, res) => {
+  sqlRequest = new sql.Request();
+  const { rut } = req.body;
+  const comando1 = "SELECT * FROM Persona p WHERE p.rut=@rut";
+  if (verificarUsuario(rut) == false) {
+    try {
+      let conn = await sql.connect(sqlConfig.config);
+      await conn
+        .input("rut", id)
+        .request()
+        .query(comando1);
+
+      let result = await conn.request().query(comando1);
+      sql.close();
+
+      res.send(result);
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    Response.status(404).send("Usuario no encontrado");
+  }
 });
 
 module.exports = router;
