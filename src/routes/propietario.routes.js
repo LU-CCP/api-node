@@ -16,9 +16,7 @@ const router = express.Router();
  *          '404':
  *              description: Recurso no encontrado
  */
-router.get('/test', function (req, res) {
 
-<<<<<<< HEAD
 router.get("/", function(req, res) {
   sql.connect(sqlConfig.config, function(err) {
     if (err) console.log(err);
@@ -104,31 +102,30 @@ router.post("/addcita", function(req, res) {
 });
 
 //promises
-router.get('/promise', function (req, res) {
-  sql.connect(sqlConfig.config)
-      .then(function (conn) {
-          return conn.query('select * from persona');
-      })
-      .then(data => {
-          res.send(data);
-      })
-      .catch(error => console.log(error))
+router.get("/promise", function(req, res) {
+  sql
+    .connect(sqlConfig.config)
+    .then(function(conn) {
+      return conn.query("select * from persona");
+    })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(error => console.log(error));
 });
 
 //async await
-router.get('/async', async (req, res) => {
-
+router.get("/async", async (req, res) => {
   try {
-      let conn = await sql.connect(sqlConfig.config);
+    let conn = await sql.connect(sqlConfig.config);
 
-      let result = await conn.request().query('select * from persona');
+    let result = await conn.request().query("select * from persona");
 
-      sql.close();
+    sql.close();
 
-      res.send(result);
+    res.send(result);
+  } catch (error) {
+    console.log(error);
   }
-  catch (error) {
-      console.log(error)
-  }
+});
 module.exports = router;
->>>>>>> master
