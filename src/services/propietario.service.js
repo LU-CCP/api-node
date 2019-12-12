@@ -25,7 +25,7 @@ async function existsPropietarioId(req) {
   }
 }
 
-async function getPropietario(body) {
+async function savePropietario(body) {
   try {
     const { rut, nombre, apellido_materno, apellido_paterno, telefono } = body;
     let conn = await sql.connect(sqlConfig.config);
@@ -117,7 +117,7 @@ async function filterPropietario(req) {
     let result = await conn
       .request()
       .input("nombre", nombre)
-      .query("SELECT * FROM Persona WHERE Persona.nombre=@nombre");
+      .query("SELECT * FROM Persona WHERE upper(Persona.nombre)=@nombre");
     sql.close();
     return result;
   } catch (error) {
@@ -126,7 +126,7 @@ async function filterPropietario(req) {
 }
 
 module.exports = {
-  getPropietario,
+  savePropietario,
   editPropietario,
   deletePropietario,
   showPropietario,

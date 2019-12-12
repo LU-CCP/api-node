@@ -60,6 +60,13 @@ router.get("/async", async (req, res) => {
 
 /**
  * @swagger
+ * tags:
+ *   name: Propietario
+ *   description: Rutas del propietario
+ */
+
+/**
+ * @swagger
  * /save:
  *  post:
  *      description: Ingreso de nuevo propietario
@@ -70,10 +77,16 @@ router.get("/async", async (req, res) => {
  *              description: Recurso no encontrado
  */
 router.post("/save", async (req, res) => {
-  let propietario = await servicesPropietario.getPropietario(req.body);
+  let propietario = await servicesPropietario.savePropietario(req.body);
   res.end("Propietario guardado");
 });
 
+/**
+ * @swagger
+ * tags:
+ *   name: Propietario
+ *   description: Rutas del propietario
+ */
 /**
  * @swagger
  * /delete:
@@ -94,6 +107,12 @@ router.get("/delete/:id", async (req, res) => {
 
 /**
  * @swagger
+ * tags:
+ *   name: Propietario
+ *   description: Rutas del propietario
+ */
+/**
+ * @swagger
  * /edit:
  *  put:
  *      description: Actualizar datos de un propietario existente a partir del id del propietario
@@ -112,6 +131,12 @@ router.put("/edit/:id", async (req, res) => {
 
 /**
  * @swagger
+ * tags:
+ *   name: Propietario
+ *   description: Rutas del propietario
+ */
+/**
+ * @swagger
  * /show:
  *  get:
  *      description: Obtener datos de un propietario a partir del su id
@@ -127,12 +152,18 @@ router.get("/show/:id", async (req, res) => {
     res.send(propietario);
   }
 });
+/**
+ * @swagger
+ * tags:
+ *   name: Propietario
+ *   description: Rutas del propietario
+ */
 
 /**
  * @swagger
  * /filter:
  *  get:
- *      description: Obtener listado de propietarios filtrado por *
+ *      description: Obtener listado de propietarios filtrado por el nombre
  *      responses:
  *          '200':
  *              description: Respuesta exitosa!
@@ -142,13 +173,6 @@ router.get("/show/:id", async (req, res) => {
 router.get("/filter/:nombre", async (req, response) => {
   if (servicesPropietario.existsPropietarioId) {
     let propietario = await servicesPropietario.filterPropietario(req.params);
-    response.send(propietario);
-  }
-});
-
-router.get("/prueba/:id", async (req, response) => {
-  if (servicesPropietario.existsPropietarioId) {
-    let propietario = await servicesPropietario.existsPropietarioId(req.params);
     response.send(propietario);
   }
 });
