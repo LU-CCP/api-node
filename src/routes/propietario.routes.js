@@ -1,6 +1,6 @@
-const express = require('express');
-const sql = require('mssql');
-const sqlConfig = require('../mssqlConfig');
+const express = require("express");
+const sql = require("mssql");
+const sqlConfig = require("../mssqlConfig");
 
 const router = express.Router();
 
@@ -16,48 +16,52 @@ const router = express.Router();
  *          '404':
  *              description: Recurso no encontrado
  */
-router.get('/test', function (req, res) {
+router.get("/test", function(req, res) {
+  sql.connect(sqlConfig.config, function(err) {
+    if (err) console.log(err);
+    const sqlRequest = new sql.Request();
 
-    sql.connect(sqlConfig.config, function (err) {
-        if (err) console.log(err);
-        const sqlRequest = new sql.Request();
-
-        sqlRequest.query('select * from persona', function (error, data) {
-            if (error) console.log(error);
-            res.send(data);
-            sql.close();
-        })
+    sqlRequest.query("select * from persona", function(error, data) {
+      if (error) console.log(error);
+      res.send(data);
+      sql.close();
     });
+  });
 });
 
 //promises
-router.get('/promise', function (req, res) {
-    sql.connect(sqlConfig.config)
-        .then(function (conn) {
-            return conn.query('select * from persona');
-        })
-        .then(data => {
-            res.send(data);
-        })
-        .catch(error => console.log(error))
+router.get("/promise", function(req, res) {
+  sql
+    .connect(sqlConfig.config)
+    .then(function(conn) {
+      return conn.query("select * from persona");
+    })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(error => console.log(error));
 });
 
 //async await
-router.get('/async', async (req, res) => {
+router.get("/async", async (req, res) => {
+  try {
+    let conn = await sql.connect(sqlConfig.config);
 
-    try {
-        let conn = await sql.connect(sqlConfig.config);
+    let result = await conn.request().query("select * from persona");
 
-        let result = await conn.request().query('select * from persona');
+    sql.close();
 
-        sql.close();
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
-        res.send(result);
-    }
-    catch (error) {
-        console.log(error)
-    }
-
+router.get("/async", async (req, res) => {
+  try {
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;
