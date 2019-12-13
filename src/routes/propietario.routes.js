@@ -4,18 +4,13 @@ const sqlConfig = require("../mssqlConfig");
 
 const router = express.Router();
 
-//callbacks
 /**
  * @swagger
- * /test:
- *  get:
- *      description: Utilizado a modo de prueba para testear el swagger
- *      responses:
- *          '200':
- *              description: Respuesta exitosa!
- *          '404':
- *              description: Recurso no encontrado
+ * tags:
+ *   name: Propietario
+ *   description: Rutas del propietario
  */
+<<<<<<< HEAD
 router.get("/test", function(req, res) {
   sql.connect(sqlConfig.config, function(err) {
     if (err) console.log(err);
@@ -25,9 +20,70 @@ router.get("/test", function(req, res) {
       if (error) console.log(error);
       res.send(data);
       sql.close();
+=======
+
+/**
+* @swagger
+* path:
+*  /propietario/{id}:
+*    get:
+*      summary: obtiene el listado de usuarios
+*      tags: [Propietario]
+*      parameters:
+*      - name: id
+*        in: path
+*        type: string 
+*      responses:
+*        "200":
+*          description: A user schema
+*/
+router.get('/:id', function (req, res) {
+
+    sql.connect(sqlConfig.config, function (err) {
+        if (err) console.log(err);
+        const sqlRequest = new sql.Request();
+
+        sqlRequest.query('select * from persona', function (error, data) {
+            if (error) console.log(error);
+            res.send(data);
+            sql.close();
+        })
+>>>>>>> master
     });
   });
 });
+
+/**
+ * @swagger
+ * path:
+ *  /propietario/:
+ *    post:
+ *      summary: registra un propietario
+ *      tags: [Propietario]
+ *      parameters:
+ *      - name 
+ *      - in: body
+ *        name: diagnostico
+ *        description: Agrega un diagnóstico.
+ *        schema:
+ *          type: object
+ *          required:
+ *            - diagnostico
+ *          properties:
+ *            id_cita:
+ *              type: integer
+ *              value: 1
+ *            descripcion:
+ *              type: string                
+ *      requestBody:
+ *        required: true
+ *      responses:
+ *        "200":
+ *          description: A user schema
+ */
+router.post('/', async (req, res) => {
+});
+
 
 //promises
 router.get("/promise", function(req, res) {
@@ -57,6 +113,11 @@ router.get("/async", async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 router.get("/async", async (req, res) => {});
 
 module.exports = router;
+=======
+
+module.exports = router;
+>>>>>>> master
