@@ -1,12 +1,23 @@
+<<<<<<< HEAD
 const express = require("express");
 const propietarioRoutes = require("./src/routes/propietario.routes");
 const pacienteRoutes = require("./src/routes/paciente.routes");
 const citaRoutes = require("./src/routes/citas.routes");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
+=======
+const express = require('express');
+const swaggerConfig = require('./src/swaggerConfig');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUI = require('swagger-ui-express');
+const propietarioRoutes = require('./src/routes/propietario.routes');
+const pacienteRoutes = require('./src/routes/paciente.routes');
+>>>>>>> master
 
 const app = express();
+const swaggerDocs = swaggerJsDoc(swaggerConfig.config);
 
+<<<<<<< HEAD
 // Extended: https://swagger.io/specification/#infoObject
 const swaggerOptions = {
   swaggerDefinition: {
@@ -41,6 +52,15 @@ app.use("/swagger", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 app.get("/test", function(req, res) {
   res.send("test");
 });
+=======
+//Middleware
+app.use(express.json());
+
+//Routes
+app.use('/swagger', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+app.use('/propietario', propietarioRoutes);
+app.use('/paciente', pacienteRoutes);
+>>>>>>> master
 
 app.listen(3005, function() {
   console.log("Server running on port 3005");
