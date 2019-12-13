@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-import { deletepaciente } from "../services/paciente.service";
+const deletePaciente = require("../services/paciente.service");
 
 router.get("/", function(req, res) {
   res.send("ruta get paciente");
@@ -8,6 +8,7 @@ router.get("/", function(req, res) {
 
 router.delete("/:id", function(req, res) {
   const { id } = req.params;
-  res.send(deletepersona(id));
+  res.send(deletePaciente(id));
 });
+
 module.exports = router;
