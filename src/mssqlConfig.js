@@ -1,4 +1,4 @@
-const dbConfig = {
+/*const dbConfig = {
   user: "magister",
   password: "A7r9bFRTBtyXot7IPxin",
   server: "magisterdereemplazo.database.windows.net",
@@ -9,9 +9,11 @@ const dbConfig = {
   }
 };
 
+*/
+
 // servidor propio
 
-/*const dbConfig = {
+const dbConfig = {
   user: "leo",
   password: "r2d2lapf95",
   server: "CL-LAGASHU6/LEO_SERVER",
@@ -21,6 +23,5 @@ const dbConfig = {
     encrypt: true
   }
 };
-*/
 
 exports.config = dbConfig;
