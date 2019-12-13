@@ -28,41 +28,15 @@ router.post("/registrarpropietario", async (req, res) => {
     esmedico,
     fecha_graduacion
   } = req.body;
-
-  const comando1 =
-    "INSERT INTO Persona VALUES(@rut, @nombre, @apellido_materno, @apellido_paterno, @telefono)";
-  const comando2 =
-    "INSERT INTO medico_veterinario VALUES(@id_persona, @fecha_graduacion)";
-  if ((await propietarioService.consultarUsuarioGuardado(rut)) == true) {
-    try {
-      let conn = await sql.connect(sqlConfig.config);
-      await conn
-        .request()
-        .input("rut", rut)
-        .input("nombre", nombre)
-        .input("apellido_materno", apellido_materno)
-        .input("apellido_paterno", apellido_paterno)
-        .input("telefono", telefono)
-        .query(comando1);
-
-      if (await esmedico) {
-        if (propietarioService.consultarMedicoRegistrado(rut) == true) {
-          await conn
-            .request()
-            .input("id_persona", propietarioService.devolverIdPersona(rut))
-            .input("fecha_graduacion", fecha_graduacion)
-            .query(comando2);
-
-          sql.close();
-
-          res.send(
-            "Usuario registrado exitosamente, agregado a medico tambien!"
-          );
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const answ = propietarioService.guardarUsuario(
+    rut,
+    nombre,
+    apellido_materno,
+    apellido_paterno,
+    telefono
+  );
+  if (answ == true) {
+    res.send("Usuario registrado exitosamente, agregado a medico tambien!");
   } else {
     res.status(409).send("Usuario ya registrado previamente");
   }
@@ -72,7 +46,7 @@ router.get("/buscarpropietario", async (req, res) => {
   sqlRequest = new sql.Request();
   const { rut } = req.body;
   const comando1 = "SELECT * FROM Persona p WHERE p.rut=@rut";
-  if (verificarUsuario(rut) == false) {
+  if ((await propietarioService.verificarUsuario(rut)) == false) {
     try {
       let conn = await sql.connect(sqlConfig.config);
       await conn
