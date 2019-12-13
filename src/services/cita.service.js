@@ -20,6 +20,10 @@ const checkCita = async id => {
 const deleteCita = async id => {
   try {
     let conn = await sql.connect(sqlConfig.config);
+    let result1 = await conn
+      .request()
+      .input("id", sql.BigInt, id)
+      .query("DELETE FROM diagnostico WHERE id_cita = @id");
     let result = await conn
       .request()
       .input("id", sql.BigInt, id)
