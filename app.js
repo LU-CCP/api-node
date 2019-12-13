@@ -1,9 +1,9 @@
-const express = require('express');
-const swaggerConfig = require('./src/swaggerConfig');
-const swaggerJsDoc = require('swagger-jsdoc');
-const swaggerUI = require('swagger-ui-express');
-const propietarioRoutes = require('./src/routes/propietario.routes');
-const pacienteRoutes = require('./src/routes/paciente.routes');
+const express = require("express");
+const swaggerConfig = require("./src/swaggerConfig");
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUI = require("swagger-ui-express");
+const propietarioRoutes = require("./src/routes/propietario.routes");
+const pacienteRoutes = require("./src/routes/paciente.routes");
 
 const app = express();
 const swaggerDocs = swaggerJsDoc(swaggerConfig.config);
@@ -12,10 +12,10 @@ const swaggerDocs = swaggerJsDoc(swaggerConfig.config);
 app.use(express.json());
 
 //Routes
-app.use('/swagger', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
-app.use('/propietario', propietarioRoutes);
-app.use('/paciente', pacienteRoutes);
+app.use("/swagger", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+app.use("/propietario", propietarioRoutes);
+app.use("/paciente", pacienteRoutes);
 
-app.listen(3005, function () {
-    console.log('Server running on port 3005');
-})
+app.listen(3005, function() {
+  console.log("Server running on port 3005");
+});
