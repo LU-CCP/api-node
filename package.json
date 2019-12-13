@@ -1,0 +1,37 @@
+{
+  "name": "api-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha './tests' --exit",
+    "start:dev": "npx nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LU-CCP/api-node.git"
+  },
+  "keywords": [
+    "api",
+    "express",
+    "LU"
+  ],
+  "author": "LU",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LU-CCP/api-node/issues"
+  },
+  "homepage": "https://github.com/LU-CCP/api-node#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mssql": "^6.0.1",
+    "supertest": "^4.0.2",
+    "swagger-jsdoc": "^3.5.0",
+    "swagger-ui-express": "^4.1.2"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.2",
+    "nodemon": "^2.0.1"
+  }
+}
