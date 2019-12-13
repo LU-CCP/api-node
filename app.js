@@ -6,6 +6,7 @@ const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
 
 const app = express();
+const swaggerDocs = swaggerJsDoc(swaggerConfig.config);
 
 // Extended: https://swagger.io/specification/#infoObject
 const swaggerOptions = {
