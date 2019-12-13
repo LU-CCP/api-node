@@ -258,4 +258,45 @@ router.get("/filter/:nombre", async (req, response) => {
   }
 });
 
+router.post("/agregar", async (request, response) => {
+  const {
+    rut,
+    nombre,
+    apellido_materno,
+    apellido_paterno,
+    telefono,
+    esMedico,
+    fecha_graduacion
+  } = request.body;
+
+  try {
+    if ((await propietarioService.verifPropietario(rut)) == false) {
+      propietarioService.setPropietario(
+        rut,
+        nombre,
+        apellido_materno,
+        apellido_paterno,
+        telefono
+      );
+      response.status(500).send("Propietario agregado correctamente");
+    } else {
+      response.status(409).send("Propietario ya registrado");
+    }
+
+    if (await esMedico) {
+      if ((await propietarioService.verifMedico(rut)) == false) {
+        propietarioService.setMedico(
+          propietarioService.getIdPersona(rut).recordsets[0],
+          fecha_graduacion
+        );
+        response.send("Medico agregado correctamente");
+      } else {
+        response.status(409).send("Medico ya registrado");
+      }
+    }
+  } catch (err) {
+    response.status(400).send(error);
+  }
+});
+
 module.exports = router;
