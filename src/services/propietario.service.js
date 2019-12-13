@@ -46,9 +46,9 @@ async function listaPropietario(res, req) {
 async function agregaPropietario(body) {
   try {
     const { rut, nombre, apellido_materno, apellido_paterno, telefono } = body;
-    const conecction = await conectar();
+    let conn = await conectar();
 
-    const result = await conecction
+    let result = await conn
       .request()
       .input("rut", rut)
       .input("nombre", nombre)
@@ -56,13 +56,12 @@ async function agregaPropietario(body) {
       .input("apellido_paterno", apellido_paterno)
       .input("telefono", telefono)
       .query(
-        "INSERT INTO Persona VALUES (@rut @nombre,@apellido_materno,@apellido_paterno, @telefono)"
+        "insert into Persona VALUES (@rut, @nombre, @apellido_materno, @apellido_paterno, @telefono)"
       );
     sql.close();
     return result;
   } catch (error) {
-    console.log("error, al añadir!");
-    //res.statusCode = 400;
+    console.log(error);
   }
 }
 

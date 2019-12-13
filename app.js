@@ -13,7 +13,7 @@ const swaggerOptions = {
     info: {
       title: "LU API",
       description: "API Creada por LU",
-      servers: ["http://localhost:3005"]
+      servers: ["http://localhost:3021"]
     }
   },
   apis: [`${process.cwd()}/src/routes/*.js`]
