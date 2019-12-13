@@ -73,21 +73,23 @@ router.get("/async", async (req, res) => {
  *          summary: Ingreso de nuevo propietario
  *          tags: [Propietario]
  *          parameters:
- *              -name: rut
- *              in: body
- *              type: string
- *              -name: nombre
- *              in: body
- *              type: string
- *              -name: apellido_materno
- *              in: body
- *              type: string
- *              -name: apellido_paterno
- *              in: body
- *              type: string
- *              -name: telefono
- *              in: body
- *              type: string
+ *            - in: body
+ *              name: user
+ *              description: Usuario a guardar
+ *              schema:
+ *                type: object
+ *                required: true
+ *                properties:
+ *                  rut:
+ *                    type: varchar
+ *                  nombre:
+ *                    type: varchar
+ *                  apellido_materno:
+ *                    type: varchar
+ *                  apellido_paterno:
+ *                    type: varchar
+ *                  telefono:
+ *                    type: varchar
  *          responses:
  *              '200':
  *                  description: Respuesta exitosa!
@@ -154,24 +156,28 @@ router.get("/delete/:id", async (req, res) => {
  *          summary: Actualizar datos de un propietario existente a partir del id del propietario
  *          tags: [Propietario]
  *          parameters:
- *              -name: id
- *              in: path
- *              type: string
- *              -name: rut
- *              in: body
- *              type: string
- *              -name: nombre
- *              in: body
- *              type: string
- *              -name: apellido_materno
- *              in: body
- *              type: string
- *              -name: apellido_paterno
- *              in: body
- *              type: string
- *              -name: telefono
- *              in: body
- *              type: string
+ *              - in: path
+ *                name: userId
+ *                type: interger
+ *                required: true
+ *                description: Editar usuario
+ *              - in: body
+ *                name: user
+ *                description: Usuario a guardar
+ *                schema:
+ *                  type: object
+ *                  required: true
+ *                  properties:
+ *                    rut:
+ *                      type: varchar
+ *                    nombre:
+ *                      type: varchar
+ *                    apellido_materno:
+ *                      type: varchar
+ *                    apellido_paterno:
+ *                      type: varchar
+ *                    telefono:
+ *                      type: varchar
  *          responses:
  *              '200':
  *                  description: Respuesta exitosa!
