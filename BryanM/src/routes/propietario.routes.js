@@ -1,103 +1,106 @@
-const express = require("express");
-const sql = require("mssql");
-const sqlConfig = require("../mssqlConfig");
-const propietarioService = require("../services/propietario.service");
+const express = require('express');
+const sql = require('mssql');
+const sqlConfig = require('../mssqlConfig');
 
 const router = express.Router();
 
-//callbacks
 /**
  * @swagger
- * /test:
- *  get:
- *      description: Utilizado a modo de prueba para testear el swagger
- *      responses:
- *          '200':
- *              description: Respuesta exitosa!
- *          '404':
- *              description: Recurso no encontrado
+ * tags:
+ *   name: Propietario
+ *   description: Rutas del propietario
  */
-router.get("/test", function(req, res) {
-  sql.connect(sqlConfig.config, function(err) {
-    if (err) console.log(err);
-    const sqlRequest = new sql.Request();
 
-    sqlRequest.query("select * from persona", function(error, data) {
-      if (error) console.log(error);
-      res.send(data);
-      sql.close();
+/**
+* @swagger
+* path:
+*  /propietario/{id}:
+*    get:
+*      summary: obtiene el listado de usuarios
+*      tags: [Propietario]
+*      parameters:
+*      - name: id
+*        in: path
+*        type: string 
+*      responses:
+*        "200":
+*          description: A user schema
+*/
+router.get('/:id', function (req, res) {
+
+    sql.connect(sqlConfig.config, function (err) {
+        if (err) console.log(err);
+        const sqlRequest = new sql.Request();
+
+        sqlRequest.query('select * from persona', function (error, data) {
+            if (error) console.log(error);
+            res.send(data);
+            sql.close();
+        })
     });
-  });
 });
 
+/**
+ * @swagger
+ * path:
+ *  /propietario/:
+ *    post:
+ *      summary: registra un propietario
+ *      tags: [Propietario]
+ *      parameters:
+ *      - name 
+ *      - in: body
+ *        name: diagnostico
+ *        description: Agrega un diagnóstico.
+ *        schema:
+ *          type: object
+ *          required:
+ *            - diagnostico
+ *          properties:
+ *            id_cita:
+ *              type: integer
+ *              value: 1
+ *            descripcion:
+ *              type: string                
+ *      requestBody:
+ *        required: true
+ *      responses:
+ *        "200":
+ *          description: A user schema
+ */
+router.post('/', async (req, res) => {
+});
+
+
 //promises
-router.get("/promise", function(req, res) {
-  sql
-    .connect(sqlConfig.config)
-    .then(function(conn) {
-      return conn.query("select * from persona");
-    })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(error => console.log(error));
+router.get('/promise', function (req, res) {
+    sql.connect(sqlConfig.config)
+        .then(function (conn) {
+            return conn.query('select * from persona');
+        })
+        .then(data => {
+            res.send(data);
+        })
+        .catch(error => console.log(error))
 });
 
 //async await
-router.get("/async", async (req, res) => {
-  try {
-    let conn = await sql.connect(sqlConfig.config);
+router.get('/async', async (req, res) => {
 
-    let result = await conn.request().query("select * from persona");
+    try {
+        let conn = await sql.connect(sqlConfig.config);
 
-    sql.close();
+        let result = await conn.request().query('select * from persona');
 
-    res.send(result);
-  } catch (error) {
-    console.log(error);
-  }
-});
+        sql.close();
 
-router.post("/agregar", async (request, response) => {
-  const {
-    rut,
-    nombre,
-    apellido_materno,
-    apellido_paterno,
-    telefono,
-    esMedico,
-    fecha_graduacion
-  } = request.body;
-
-  try {
-    if ((await propietarioService.verifPropietario(rut)) == false) {
-      propietarioService.setPropietario(
-        rut,
-        nombre,
-        apellido_materno,
-        apellido_paterno,
-        telefono
-      );
-      response.status(500).send("Propietario agregado correctamente");
-    } else {
-      // response.status(409).send("Propietario ya registrado");
-      console.log(await propietarioService.getIdPersona(rut).recordset[0].id);
+        res.send(result);
+    }
+    catch (error) {
+        console.log(error)
     }
 
-    if (await esMedico) {
-      if ((await propietarioService.verifMedico(rut)) == false) {
-        propietarioService.setMedico(
-          await propietarioService.getIdPersona(rut).recordset[0].id,
-          fecha_graduacion
-        );
-        response.send("Medico agregado correctamente");
-      } else {
-        response.status(409).send("Medico ya registrado");
-      }
-    }
-  } catch (err) {
-    response.status(400).send(err);
-  }
 });
+
 
 module.exports = router;
