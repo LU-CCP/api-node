@@ -12,31 +12,29 @@ const router = express.Router();
  */
 
 /**
-* @swagger
-* path:
-*  /propietario/{id}:
-*    get:
-*      summary: obtiene el listado de usuarios
-*      tags: [Propietario]
-*      parameters:
-*      - name: id
-*        in: path
-*        type: string 
-*      responses:
-*        "200":
-*          description: A user schema
-*/
-router.get('/:id', function (req, res) {
+ * @swagger
+ * path:
+ *  /propietario/{id}:
+ *    get:
+ *      summary: obtiene el listado de usuarios
+ *      tags: [Propietario]
+ *      parameters:
+ *      - name: id
+ *        in: path
+ *        type: string
+ *      responses:
+ *        "200":
+ *          description: A user schema
+ */
+router.get("/:id", function(req, res) {
+  sql.connect(sqlConfig.config, function(err) {
+    if (err) console.log(err);
+    const sqlRequest = new sql.Request();
 
-    sql.connect(sqlConfig.config, function (err) {
-        if (err) console.log(err);
-        const sqlRequest = new sql.Request();
-
-        sqlRequest.query('select * from persona', function (error, data) {
-            if (error) console.log(error);
-            res.send(data);
-            sql.close();
-        })
+    sqlRequest.query("select * from persona", function(error, data) {
+      if (error) console.log(error);
+      res.send(data);
+      sql.close();
     });
   });
 });
@@ -49,7 +47,7 @@ router.get('/:id', function (req, res) {
  *      summary: registra un propietario
  *      tags: [Propietario]
  *      parameters:
- *      - name 
+ *      - name
  *      - in: body
  *        name: diagnostico
  *        description: Agrega un diagnóstico.
@@ -62,16 +60,14 @@ router.get('/:id', function (req, res) {
  *              type: integer
  *              value: 1
  *            descripcion:
- *              type: string                
+ *              type: string
  *      requestBody:
  *        required: true
  *      responses:
  *        "200":
  *          description: A user schema
  */
-router.post('/', async (req, res) => {
-});
-
+router.post("/", async (req, res) => {});
 
 //promises
 router.get("/promise", function(req, res) {
@@ -100,7 +96,6 @@ router.get("/async", async (req, res) => {
     console.log(error);
   }
 });
-
 
 //las promesas funcionan similar a los callback
 //cuando trabajamos con promesas cuando se genera un error va a caer dentro del catch
