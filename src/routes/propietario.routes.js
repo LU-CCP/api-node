@@ -72,7 +72,6 @@ router.post("/agregar", function(request, response) {
     } else {
       const sqlRequest = new sql.Request();
 
-<<<<<<< HEAD
       sqlRequest.query(
         `INSERT INTO Persona VALUES('${rut}', '${nombre}', '${apellido_materno}', '${apellido_paterno}', '${telefono}')`,
         function(error, data) {
@@ -89,6 +88,3 @@ router.post("/agregar", function(request, response) {
 });
 
 module.exports = router;
-=======
-module.exports = router;
->>>>>>> master
