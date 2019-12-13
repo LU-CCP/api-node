@@ -1,6 +1,7 @@
 const express = require("express");
-const sql = require("mssql");
-const sqlConfig = require("../mssqlConfig");
+// const sql = require("mssql");
+// const sqlConfig = require("../mssqlConfig");
+const citaServicios = require("../services/cita.service");
 
 const router = express.Router();
 
@@ -18,18 +19,15 @@ const router = express.Router();
  */
 
 //async await
-router.post("/add", async (req, res) => {
-  
-  try {
-    let connection = await sql.connect(sqlConfig.config);
-
-    let data = await connection.query(
-      `INSERT INTO cita (fecha, id_paciente, motivo_consulta, id_medico, monto) VALUES ('${fecha}','${idPaciente}','${motivoConsulta}','${idMedico}',${monto})`
-    );
-    res.send(data);
-  } catch (error) {
-    console.log(error);
-  }
+router.post("/post", async (req, res) => {
+  citaServicios.postCita(req.body);
+  res.status(200).send("La informacion a sido insertada");
 });
+
+// //async await
+// router.post("/", async (req, res) => {
+//   citaServicios.postCita(req.body);
+//   //   res.status(200).send(result);
+// });
 
 module.exports = router;

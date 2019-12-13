@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "mocha './src/tests/*test.js'",
+    "test": "mocha './tests' --exit",
     "start:dev": "npx nodemon app.js"
   },
   "repository": {

@@ -2,19 +2,34 @@
 const sql = require("mssql");
 const sqlConfig = require("../mssqlConfig");
 
-//Interactuando con la bd
+// //Interactuando con la bd
+// const checkMedico = async id => {
+//   try {
+//     let conn = await sql.connect(sqlConfig.config);
+//     let result = await conn
+//       .request()
+//       .input("id", sql.BigInt, id)
+//       .query("SELECT * FROM paciente WHERE ");
+//   }
+// };
 
-async function postCita(data) {
+const postCita = async body => {
   //await
   //obtiene propietario de bd
-  let { fecha, idPaciente, motivoConsulta, idMedico, monto } = req.body;
+  let { fecha, idPaciente, motivoConsulta, idMedico, monto } = body;
 
-    let connection = await sql.connect(sqlConfig.config);
+  try {
+    let conn = await sql.connect(sqlConfig.config);
 
-    let data = await connection.query(
-        `INSERT INTO cita (fecha, id_paciente, motivo_consulta, id_medico, monto) VALUES ('${fecha}','${idPaciente}','${motivoConsulta}','${idMedico}',${monto})`
+    let result = await conn
+      .request()
+      .query(
+        `INSERT INTO cita (fecha, id_paciente, motivo_consulta, id_medico, monto) VALUES ('${fecha}','${idPaciente}','${motivoConsulta}','${idMedico}','${monto}')`
       );
-  });
-}
+    sql.close();
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-module.exports = {postCita}
+module.exports = { postCita };
