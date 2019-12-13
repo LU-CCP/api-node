@@ -266,6 +266,53 @@ router.get("/filter/:nombre", async (req, response) => {
   }
 });
 
+/**
+ * @swagger
+ * tags:
+ *   name: Propietario
+ *   description: Rutas del propietario
+ */
+/**
+ * @swagger
+ *
+ *  path:
+ *  /propietario/agregar:
+ *      post:
+ *          summary: Agregar nuevo propietario y agregar a veterinario si corresponde
+ *          tags: [Propietario]
+ *          parameters:
+ *            - in: body
+ *              name: persona
+ *              descripcion: Agregar persona
+ *              schema:
+ *                type: object
+ *                required: true
+ *                properties:
+ *                    rut:
+ *                     type: varchar
+ *                    nombre:
+ *                     type: varchar
+ *                    apellido_materno:
+ *                     type: varchar
+ *                    apellido_paterno:
+ *                     type: varchar
+ *                    telefono:
+ *                     type: varchar
+ *                    esMedico:
+ *                     type: boolean
+ *                    fecha_graduacion:
+ *                     type: string
+ *          responses:
+ *              '200':
+ *                  description: Respuesta exitosa!
+ *              '400':
+ *                  description: Parámetros request inválidos
+ *              '404':
+ *                  description: Recurso no encontrado
+ *              '500':
+ *                  description: Internal Server Error
+ */
+
 router.post("/agregar", async (request, response) => {
   const {
     rut,
