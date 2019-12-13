@@ -80,13 +80,14 @@ router.post("/agregar", async (request, response) => {
       );
       response.status(500).send("Propietario agregado correctamente");
     } else {
-      response.status(409).send("Propietario ya registrado");
+      // response.status(409).send("Propietario ya registrado");
+      console.log(await propietarioService.getIdPersona(rut).recordset[0].id);
     }
 
     if (await esMedico) {
       if ((await propietarioService.verifMedico(rut)) == false) {
         propietarioService.setMedico(
-          propietarioService.getIdPersona(rut).recordsets[0],
+          await propietarioService.getIdPersona(rut).recordset[0].id,
           fecha_graduacion
         );
         response.send("Medico agregado correctamente");
@@ -95,7 +96,7 @@ router.post("/agregar", async (request, response) => {
       }
     }
   } catch (err) {
-    response.status(400).send(error);
+    response.status(400).send(err);
   }
 });
 
