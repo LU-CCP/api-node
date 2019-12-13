@@ -101,8 +101,7 @@ const deletePaciente = async id => {
       .input("id", id)
       .query(`DELETE FROM paciente WHERE id = @id`);
     sql.close();
-    // return status(200).send({ message: "Paciente deleted successfully" });
-    return "Paciente deleted successfully";
+    return { message: "Paciente deleted successfully" };
   } catch (e) {
     console.log(e);
   }
@@ -115,6 +114,20 @@ const getPropietario = async id => {
       .request()
       .input("id_propietario", id)
       .query(`SELECT * FROM persona WHERE id = @id_propietario`);
+    sql.close();
+    return result.rowsAffected;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const getPaciente = async id => {
+  try {
+    let conn = await sql.connect(config);
+    let result = await conn
+      .request()
+      .input("id", id)
+      .query(`SELECT * FROM paciente WHERE id = @id`);
     sql.close();
     return result.rowsAffected;
   } catch (e) {
@@ -142,5 +155,6 @@ module.exports = {
   updatePaciente,
   deletePaciente,
   getPropietario,
-  getPacientes
+  getPacientes,
+  getPaciente
 };

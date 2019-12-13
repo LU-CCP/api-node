@@ -6,7 +6,8 @@ const {
   deletePaciente,
   getPropietario,
   ingresoPaciente,
-  getPacientes
+  getPacientes,
+  getPaciente
 } = require("../services/paciente.service.js");
 
 const buscar_paciente = require("../services/paciente.service");
@@ -14,17 +15,19 @@ const buscar_paciente = require("../services/paciente.service");
 /**
  * @swagger
  * path:
- *  /propietario/{id}:
+ *  /paciente/{id}:
  *    get:
- *      summary: obtiene el listado de usuarios
- *      tags: [Propietario]
+ *      summary: obtiene un paciente
+ *      tags: [Paciente]
  *      parameters:
  *      - name: id
  *        in: path
- *        type: string
+ *        type: integer
  *      responses:
  *        "404":
- *          description: User not found
+ *          description: Paciente not found
+ *        "200":
+ *          description: Éxito!
  */
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
@@ -35,22 +38,50 @@ router.get("/:id", async (req, res) => {
 
 /**
  * @swagger
- * path:
- *  /propietario:
+ *  /paciente:
  *    post:
- *      summary: obtiene el listado de usuarios
- *      tags: [Propietario]
+ *      summary: Creates a new Paciente.
+ *      consumes:
+ *        - application/json
+ *      tags:
+ *        [Paciente]
+ *      parameters:
+ *        - in: body
+ *          name: user
+ *          description: The user to create.
+ *          schema:
+ *            type: object
+ *            required:
+ *              - nombre
+ *              - raza
+ *              - especie
+ *              - id_propietario
+ *              - sexo
+ *              - fecha_nacimiento
+ *            properties:
+ *              nombre:
+ *                type: string
+ *              raza:
+ *                type: string
+ *              especie:
+ *                type: string
+ *              id_propietario:
+ *                type: integer
+ *              sexo:
+ *                type: boolean
+ *              fecha_nacimiento:
+ *                type: string
  *      responses:
- *        "400":
- *          description: Paciente bad
- *        "201":
- *          description: ok!
+ *        201:
+ *          description: New Paciente created!
+ *        404:
+ *          description: Propietario not found!
  */
 router.post("/", async (req, res) => {
   const { body } = req;
   const { id_propietario } = body;
   if ((await getPropietario(id_propietario)) == 0) {
-    res.status(400).send({ message: "Error, Propietario not found" });
+    res.status(404).send({ message: "Error, Propietario not found" });
   } else {
     res.status(201).send(await ingresoPaciente(body));
   }
@@ -58,27 +89,54 @@ router.post("/", async (req, res) => {
 
 /**
  * @swagger
- * path:
- *  /propietario/{id}:
+ *  /paciente/{id}:
  *    put:
- *      summary: obtiene el listado de usuarios
- *      tags: [Propietario]
+ *      summary: Creates a new Paciente.
+ *      consumes:
+ *        - application/json
+ *      tags:
+ *        [Paciente]
  *      parameters:
  *      - name: id
  *        in: path
- *        type: string
+ *        type: integer
+ *      - in: body
+ *        name: user
+ *        description: The user to create.
+ *        schema:
+ *            type: object
+ *            required:
+ *              - nombre
+ *              - raza
+ *              - especie
+ *              - id_propietario
+ *              - sexo
+ *              - fecha_nacimiento
+ *            properties:
+ *              nombre:
+ *                type: string
+ *              raza:
+ *                type: string
+ *              especie:
+ *                type: string
+ *              id_propietario:
+ *                type: integer
+ *              sexo:
+ *                type: boolean
+ *              fecha_nacimiento:
+ *                type: string
  *      responses:
- *        "400":
- *          description: Paciente updated
- *        "201":
- *          description: ok!
+ *        201:
+ *          description: Paciente updated!
+ *        404:
+ *          description: Propietario not found!
  */
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { body } = req;
   const { id_propietario } = body;
   if ((await getPropietario(id_propietario)) == 0) {
-    res.status(400).send({ message: "Error, Propietario not found" });
+    res.status(404).send({ message: "Error, Propietario not found" });
   } else {
     res.status(201).send(await updatePaciente(id, body));
   }
@@ -87,33 +145,46 @@ router.put("/:id", async (req, res) => {
 /**
  * @swagger
  * path:
- *  /propietario/{id}:
+ *  /paciente/{id}:
  *    delete:
- *      summary: obtiene el listado de usuarios
- *      tags: [Propietario]
+ *      summary: obtiene un paciente
+ *      tags: [Paciente]
  *      parameters:
  *      - name: id
  *        in: path
- *        type: string
+ *        type: integer
  *      responses:
- *        "400":
- *          description: Paciente deleted
- *        "201":
- *          description: ok!
+ *        "200":
+ *          description: Paciente deleted successfully!
+ *        404:
+ *          description: Paciente not found!
  */
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
-  res.send(await deletePaciente(id));
+  if ((await getPaciente(id)) == 0) {
+    res.status(404).send({ message: "Error, Paciente not found" });
+  } else {
+    res.status(200).send(await deletePaciente(id));
+  }
 });
 
 /**
  * @swagger
- * /:propiedad/:busqueda:
- *  get:
- *      description: Devuelve los pacientens que cumplan con el campo de busqueda en la propiedad seleccionada
+ * path:
+ *  /paciente/{propiedad}/{busqueda}:
+ *    get:
+ *      summary: obtiene el listado de usuarios
+ *      tags: [Paciente]
+ *      parameters:
+ *      - name: propiedad
+ *        in: path
+ *        type: string
+ *      - name: busqueda
+ *        in: path
+ *        type: string
  *      responses:
- *          '200':
- *              description: Respuesta exitosa
+ *        "200":
+ *          description: ok!
  */
 router.get("/:propiedad/:busqueda", async (req, res) => {
   const { propiedad, busqueda } = req.params;
