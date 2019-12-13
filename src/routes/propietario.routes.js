@@ -5,17 +5,11 @@ const servicesPropietario = require("../services/propietario.service");
 
 const router = express.Router();
 
-//callbacks
 /**
  * @swagger
- * /test:
- *  get:
- *      description: Utilizado a modo de prueba para testear el swagger
- *      responses:
- *          '200':
- *              description: Respuesta exitosa!
- *          '404':
- *              description: Recurso no encontrado
+ * tags:
+ *   name: Propietario
+ *   description: Rutas del propietario
  */
 router.get("/test", function(req, res) {
   sql.connect(sqlConfig.config, function(err) {
@@ -29,6 +23,36 @@ router.get("/test", function(req, res) {
     });
   });
 });
+
+/**
+ * @swagger
+ * path:
+ *  /propietario/:
+ *    post:
+ *      summary: registra un propietario
+ *      tags: [Propietario]
+ *      parameters:
+ *      - name
+ *      - in: body
+ *        name: diagnostico
+ *        description: Agrega un diagnóstico.
+ *        schema:
+ *          type: object
+ *          required:
+ *            - diagnostico
+ *          properties:
+ *            id_cita:
+ *              type: integer
+ *              value: 1
+ *            descripcion:
+ *              type: string
+ *      requestBody:
+ *        required: true
+ *      responses:
+ *        "200":
+ *          description: A user schema
+ */
+router.post("/", async (req, res) => {});
 
 //promises
 router.get("/promise", function(req, res) {
