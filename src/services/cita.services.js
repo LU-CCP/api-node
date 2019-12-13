@@ -37,6 +37,42 @@ const checkCita = async id => {
   }
 };
 
+const checkMedico = async id => {
+  try {
+    let conn = await sql.connect(sqlConfig.config);
+    let result = await conn
+      .request()
+      .input("id", sql.BigInt, id)
+      .query("SELECT * FROM medico_veterinario WHERE id = @id");
+    sql.close();
+    if (result.rowsAffected > 0) return result;
+
+    return false;
+  } catch (error) {
+    return false;
+  }
+};
+
+const checkPaciente = async id => {
+  try {
+    let conn = await sql.connect(sqlConfig.config);
+    let result = await conn
+      .request()
+      .input("id", sql.BigInt, id)
+      .query("SELECT * FROM paciente WHERE id = @id");
+    sql.close();
+    if (result.rowsAffected > 0) return result;
+
+    return false;
+  } catch (error) {
+    return false;
+  }
+};
+
+const citaValida = (id_medico, id_paciente) => {
+  return checkMedico(id_medico) && checkPaciente(id_paciente);
+};
+
 const putCita = async (body, params) => {
   const { fecha, id_paciente, motivo_consulta, id_medico, monto } = body;
   const { id } = params;
@@ -47,6 +83,7 @@ const putCita = async (body, params) => {
   sqlRequest.input("motivo_consulta", motivo_consulta);
   sqlRequest.input("id_medico", id_medico);
   sqlRequest.input("monto", monto);
+
   try {
     let conn = await sql.connect(sqlConfig.config);
 

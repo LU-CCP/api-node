@@ -23,15 +23,6 @@ router.post("/", (req, res) => {
   postCita(req.body, res);
 });
 
-// router.put("/:id", async (req, res) => {
-//   const result = await CitaService.checkCita(req.params.id);
-//   if (!result) {
-//     res.status(400).json({ error: "No se encuentra la cita" });
-//     return;
-//   }
-//   res.status(200).send(result);
-// });
-
 router.put("/update/:id", async (req, res) => {
   const result = await citaServices.checkCita(req.params.id);
   if (!result) {
