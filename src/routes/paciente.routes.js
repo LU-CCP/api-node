@@ -91,7 +91,7 @@ router.post("/", async (req, res) => {
  * @swagger
  *  /paciente/{id}:
  *    put:
- *      summary: Creates a new Paciente.
+ *      summary: Update a Paciente.
  *      consumes:
  *        - application/json
  *      tags:
