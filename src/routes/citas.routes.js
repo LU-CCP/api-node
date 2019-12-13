@@ -3,9 +3,16 @@ const citasServices = require("../services/citas.services");
 const router = express.Router();
 /**
  * @swagger
- * /async :
- *  get:
- *      description: ruta para traer los datos de la tabla cita
+ * path:
+ *  /cita/async:
+ *      get:
+ *          summary: ruta para traer los datos de la tabla cita
+ *          tags: [cita]
+ *          parameters:
+ *              -name: id
+ *              in: path
+ *              type: string
+ *
  *      responses:
  *          '200':
  *              description: Respuesta exitosa!
@@ -26,20 +33,21 @@ router.get("/async", async (req, res) => {
 });
 /**
  * @swagger
- * /:id :
- *  put:
- *      description: Ruta para modificar una cita
- *      responses:
- *          '200':
- *              description: actualizacion exitosa!
- *          '404':
- *              description: Recurso no encontrado
- *           '500':
- *               description: No se puede actualizar, error no identificado
- *      consumes:
- *              'application/json'
- *      produces:
- *              'application/json'
+ path:
+ *  /cita/:id:
+ *      put:
+ *          summary: Actualizar cita 
+ *          tags: [cita]
+ *         
+ *          responses:
+ *              '200':
+ *                  description: Respuesta exitosa!
+ *              '400':
+ *                  description: Parámetros request inválidos
+ *              '404':
+ *                  description: Recurso no encontrado
+ *              '500':
+ *                  description: Internal Server Error
  */
 router.put("/:id", async (req, res) => {
   const result = await CitaService.checkCita(req.params.id);
@@ -52,16 +60,21 @@ router.put("/:id", async (req, res) => {
 
 /**
  * @swagger
- * /:id :
- *  delete:
- *      description: Ruta para eliminar una cita por su ID unica
+ *  path:
+ *  /cita/:id:
+ *      delete:
+ *          summary: eliminar cita
+ *          tags: [cita]
+ *      parameters:
+ *              -name: id
+ *              in: path
+ *              type: string
  *      responses:
  *          '200':
  *              description: Respuesta exitosa!
  *          '404':
  *              description: Recurso no encontrado
- *           '500':
- *               description: No se puede eliminar, error no identificado
+ *
  *      consumes:
  *              'application/json'
  *      produces:
