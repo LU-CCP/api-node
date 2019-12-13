@@ -2,11 +2,6 @@ const express = require("express");
 const sql = require("mssql");
 const sqlConfig = require("../mssqlConfig");
 
-const existeCita = () => {};
-
-`IF EXISTS (SELECT id FROM cita WHERE id = 3)
-UPDATE cita set cita.fecha= cita.fecha`;
-
 const getCita = async (req, res) => {
   try {
     let conn = await sql.connect(sqlConfig.config);
@@ -28,7 +23,7 @@ const checkCita = async id => {
       .request()
       .input("id", sql.BigInt, id)
       .query("SELECT * FROM cita WHERE id = @id");
-    sql.close();
+
     if (result.rowsAffected > 0) return result;
 
     return false;
@@ -44,12 +39,14 @@ const checkMedico = async id => {
       .request()
       .input("id", sql.BigInt, id)
       .query("SELECT * FROM medico_veterinario WHERE id = @id");
-    sql.close();
+
     if (result.rowsAffected > 0) return result;
 
     return false;
   } catch (error) {
     return false;
+  } finally {
+    sql.close();
   }
 };
 
@@ -60,17 +57,29 @@ const checkPaciente = async id => {
       .request()
       .input("id", sql.BigInt, id)
       .query("SELECT * FROM paciente WHERE id = @id");
-    sql.close();
+
     if (result.rowsAffected > 0) return result;
 
     return false;
   } catch (error) {
     return false;
+  } finally {
+    sql.close();
   }
 };
 
-const citaValida = (id_medico, id_paciente) => {
-  return checkMedico(id_medico) && checkPaciente(id_paciente);
+const citaValida = async body => {
+  let valido;
+  let = { fecha, id_medico, motivo_consulta, id_paciente, monto } = body;
+
+  if ((await checkMedico(id_medico)) && (await checkPaciente(id_paciente))) {
+    valido = true;
+  } else {
+    valido = false;
+  }
+  console.log(valido);
+
+  return valido;
 };
 
 const putCita = async (body, params) => {
@@ -97,4 +106,28 @@ const putCita = async (body, params) => {
   }
 };
 
-module.exports = { getCita, checkCita, putCita };
+const postCita = async body => {
+  const { fecha, id_paciente, motivo_consulta, id_medico, monto } = body;
+  const sqlRequest = new sql.Request();
+
+  sqlRequest.input("fecha", fecha);
+  sqlRequest.input("id_paciente", id_paciente);
+  sqlRequest.input("motivo_consulta", motivo_consulta);
+  sqlRequest.input("id_medico", id_medico);
+  sqlRequest.input("monto", monto);
+
+  try {
+    let conn = await sql.connect(sqlConfig.config);
+
+    let result = await conn.request().query(
+      `INSERT INTO cita (fecha, id_paciente, motivo_consulta, id_medico, monto)
+        VALUES ('${fecha}', '${id_paciente}', '${motivo_consulta}', '${id_medico}', ${monto}) `
+    );
+  } catch (error) {
+    console.log(error);
+  } finally {
+    sql.close();
+  }
+};
+
+module.exports = { getCita, checkCita, putCita, postCita, citaValida };

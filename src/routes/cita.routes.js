@@ -33,4 +33,15 @@ router.put("/update/:id", async (req, res) => {
   res.status(200).send(result);
 });
 
+router.post("/crear", async (req, res) => {
+  const result = await citaServices.citaValida(req.body);
+  if (!result) {
+    res.status(400).json({ error: "ID medico/paciente invalido" });
+    return;
+  } else {
+    citaServices.postCita(req.body);
+    res.status(200).send("Agregado");
+  }
+});
+
 module.exports = router;
