@@ -95,15 +95,19 @@ router.get("/listaPersonas", async (req, res) => {
 router.post("/addPersonas", async (req, res) => {
   try {
     let i = await funciones.agregaPropietario(req.body);
+    res.end("Propietario agregado!");
   } catch (error) {
     console.log(error);
   }
 });
 
 router.get("/delete/:id", async (req, res) => {
-  if (funciones.compruebaPropietario) {
+  try {
+    console.log(req.params);
     let propietario = await funciones.borraPropietario(req.params);
     res.end("Propietario eliminado");
+  } catch (error) {
+    res.send("no se pudo eliminar!");
   }
 });
 

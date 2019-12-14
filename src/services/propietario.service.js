@@ -8,6 +8,7 @@ async function conectar() {
     return conecction;
   } catch (error) {
     console.log("se produjo un error en la conexion");
+    console.log(error);
   }
 }
 
@@ -35,7 +36,9 @@ async function compruebaPropietario(req) {
 async function listaPropietario(res, req) {
   try {
     const conecction = await conectar();
-    let data = await conecction.query("SELECT * FROM Persona");
+    let data = await conecction.query(
+      "SELECT nombre, apellido_materno, apellido_paterno FROM Persona"
+    );
     sql.close();
     return data;
   } catch (error) {
@@ -73,7 +76,7 @@ async function borraPropietario(req) {
     let result = await conecction
       .request()
       .input("id", id)
-      .query("DELETE FROM Persona WHERE Persona.id=@id");
+      .query("DELETE FROM Persona WHERE id=@id");
     sql.close();
     return result;
   } catch (error) {
