@@ -24,7 +24,9 @@
   "homepage": "https://github.com/LU-CCP/api-node#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "mocha": "^6.2.2",
     "mssql": "^6.0.1",
+    "supertest": "^4.0.2",
     "swagger-jsdoc": "^3.5.0",
     "swagger-ui-express": "^4.1.2"
   },
