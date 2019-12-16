@@ -1,7 +1,8 @@
 const express = require("express");
 const propietarioRoutes = require("./src/routes/propietario.routes");
 const pacienteRoutes = require("./src/routes/paciente.routes");
-const medicamentosRoutes = require("./src/routes/medicamentos.routes");
+const diagnosticoRoutes = require("./src/routes/diagnostico.routes");
+const swaggerConfig = require("./src/swaggerConfig");
 
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
@@ -10,24 +11,16 @@ const app = express();
 const swaggerDocs = swaggerJsDoc(swaggerConfig.config);
 
 // Extended: https://swagger.io/specification/#infoObject
-const swaggerOptions = {
-  swaggerDefinition: {
-    info: {
-      title: "LU API",
-      description: "API Creada por LU",
-      servers: ["http://localhost:3005"]
-    }
-  },
-  apis: [`${process.cwd()}/src/routes/*.js`]
-};
-
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
-app.use(express.json());
-app.use("/propietario", propietarioRoutes);
-app.use("/paciente", pacienteRoutes);
-app.use("/medicamento", medicamentosRoutes);
-app.use("/swagger", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+// const swaggerOptions = {
+//   swaggerDefinition: {
+//     info: {
+//       title: "LU API",
+//       description: "API Creada por LU",
+//       servers: ["http://localhost:3005"]
+//     }
+//   },
+//   apis: [`${process.cwd()}/src/routes/*.js`]
+// };
 
 /**
  * @swagger
@@ -54,9 +47,10 @@ app.use(express.json());
 app.use("/swagger", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 app.use("/propietario", propietarioRoutes);
 app.use("/paciente", pacienteRoutes);
+app.use("/diagnostico", diagnosticoRoutes);
 
-app.listen(API_PORT, function() {
-  console.log("Server running on port", API_PORT);
-});
+// app.listen(API_PORT, function() {
+//   console.log("Server running on port", API_PORT);
+// });
 
 module.exports = app;

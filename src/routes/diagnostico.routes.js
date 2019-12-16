@@ -1,5 +1,5 @@
 const express = require("express");
-const services = require("../services/diagnostico.services");
+const services = require("../services/diagnostico.service");
 const router = express.Router();
 
 /**
