@@ -16,7 +16,7 @@ const getPacientes = async (propiedad, busqueda) => {
     sql.close();
     return result.recordset;
   } catch (error) {
-    console.log(error);
+    //  console.log(error);
   }
 };
 

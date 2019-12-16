@@ -188,7 +188,9 @@ router.delete("/:id", async (req, res) => {
  */
 router.get("/:propiedad/:busqueda", async (req, res) => {
   const { propiedad, busqueda } = req.params;
-  res.status(200).send(await getPacientes(propiedad, busqueda));
+  if ((await getPacientes(propiedad, busqueda)) != null) {
+    res.status(200).send(await getPacientes(propiedad, busqueda));
+  } else res.status(404).send("error");
 });
 
 module.exports = router;
