@@ -14,7 +14,6 @@ async function postCita(data) {
     let data = await connection.query(
         `INSERT INTO cita (fecha, id_paciente, motivo_consulta, id_medico, monto) VALUES ('${fecha}','${idPaciente}','${motivoConsulta}','${idMedico}',${monto})`
       );
-  });
-}
+  }
 
 module.exports = {postCita}
