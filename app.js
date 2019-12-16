@@ -1,18 +1,10 @@
 const express = require("express");
 const propietarioRoutes = require("./src/routes/propietario.routes");
 const pacienteRoutes = require("./src/routes/paciente.routes");
-const diagnosticoRoutes = require("./src/routes/diagnostico.routes");
+const medicamentosRoutes = require("./src/routes/medicamentos.routes");
 
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
-require("dotenv").config();
-const express = require("express");
-const swaggerConfig = require("./src/swaggerConfig");
-const swaggerJsDoc = require("swagger-jsdoc");
-const swaggerUI = require("swagger-ui-express");
-const propietarioRoutes = require("./src/routes/propietario.routes");
-const pacienteRoutes = require("./src/routes/paciente.routes");
-const { API_PORT } = process.env;
 
 const app = express();
 const swaggerDocs = swaggerJsDoc(swaggerConfig.config);
@@ -34,9 +26,23 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use(express.json());
 app.use("/propietario", propietarioRoutes);
 app.use("/paciente", pacienteRoutes);
-app.use("/diagnostico", diagnosticoRoutes);
-
+app.use("/medicamento", medicamentosRoutes);
 app.use("/swagger", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+
+/**
+ * @swagger
+ * /test:
+ *  get:
+ *      description: Utilizado a modo de prueba para testear el swagger
+ *      responses:
+ *          '200':
+ *              description: Respuesta exitosa!
+ *          '404':
+ *              description: Recurso no encontrado
+ */
+app.get("/test", function(req, res) {
+  res.send("test");
+});
 
 app.listen(3005, function() {
   console.log("Server running on port 3005");
