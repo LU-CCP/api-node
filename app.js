@@ -8,7 +8,7 @@ const pacienteRoutes = require('./src/routes/paciente.routes');
 const { API_PORT } = process.env;
 
 const app = express();
-// const swaggerDocs = swaggerJsDoc(swaggerConfig.config);
+const swaggerDocs = swaggerJsDoc(swaggerConfig.config);
 
 // Extended: https://swagger.io/specification/#infoObject
 const swaggerOptions = {
