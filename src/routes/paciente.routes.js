@@ -7,10 +7,9 @@ const {
   getPropietario,
   ingresoPaciente,
   getPacientes,
-  getPaciente
+  getPaciente,
+  obtener_paciente
 } = require("../services/paciente.service.js");
-
-const buscar_paciente = require("../services/paciente.service");
 
 /**
  * @swagger
@@ -31,8 +30,10 @@ const buscar_paciente = require("../services/paciente.service");
  */
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  if (await buscar_paciente.obtener_paciente(id)) {
-    res.send(await buscar_paciente.obtener_paciente(id));
+  if ((await getPaciente(id)) == 0) {
+    res.status(404).send({ message: "Error, Resource not found" });
+  } else {
+    res.status(200).send(await obtener_paciente(id));
   }
 });
 
@@ -135,8 +136,11 @@ router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { body } = req;
   const { id_propietario } = body;
-  if ((await getPropietario(id_propietario)) == 0) {
-    res.status(404).send({ message: "Error, Propietario not found" });
+  if (
+    (await getPropietario(id_propietario)) == 0 ||
+    (await getPaciente(id)) == 0
+  ) {
+    res.status(404).send({ message: "Error, No updated" });
   } else {
     res.status(201).send(await updatePaciente(id, body));
   }
@@ -188,7 +192,13 @@ router.delete("/:id", async (req, res) => {
  */
 router.get("/:propiedad/:busqueda", async (req, res) => {
   const { propiedad, busqueda } = req.params;
-  res.status(200).send(await getPacientes(propiedad, busqueda));
+  const reg = await getPacientes(propiedad, busqueda);
+
+  if (reg.length == 0) {
+    res.status(404).send({ message: "Error, Paciente not found" });
+  } else {
+    res.status(200).send(await getPacientes(propiedad, busqueda));
+  }
 });
 
 module.exports = router;

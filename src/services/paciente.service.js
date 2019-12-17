@@ -142,8 +142,7 @@ async function obtener_paciente(id) {
       .request()
       .input("id", id)
       .query("select * from paciente where paciente.id = @id");
-    if (result.recordset.length == 0) return 404;
-    else return result.recordset;
+    return result.recordset;
   } catch (error) {
     console.log(error);
   }
