@@ -192,6 +192,7 @@ router.delete("/:id", async (req, res) => {
  */
 router.get("/:propiedad/:busqueda", async (req, res) => {
   const { propiedad, busqueda } = req.params;
+<<<<<<< HEAD
   const reg = await getPacientes(propiedad, busqueda);
 
   if (reg.length == 0) {
@@ -199,6 +200,11 @@ router.get("/:propiedad/:busqueda", async (req, res) => {
   } else {
     res.status(200).send(await getPacientes(propiedad, busqueda));
   }
+=======
+  if ((await getPacientes(propiedad, busqueda)) != null) {
+    res.status(200).send(await getPacientes(propiedad, busqueda));
+  } else res.status(404).send("error");
+>>>>>>> a648a0030e4964fee0e571a3850498c13596efbb
 });
 
 module.exports = router;
